@@ -72,7 +72,10 @@ class GraphMasking(Layer):
 
     def compute_mask(self, inputs, mask=None):
         x = inputs[0] if isinstance(inputs, list) else inputs
-        return x[..., -1:]
+        mask = tf.cast(x[..., -1:],tf.bool)
+        mask = tf.squeeze(mask)
+        mask = tf.ensure_shape(mask, [None, None])
+        return mask
 
     def call(self, inputs, **kwargs):
         # Remove mask from features
