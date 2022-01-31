@@ -1,3 +1,5 @@
+%%writefile /opt/conda/lib/python3.7/site-packages/spektral/data/loaders.py
+
 import numpy as np
 import tensorflow as tf
 
@@ -397,6 +399,11 @@ class BatchLoader(Loader):
 
         y = packed.pop("y_list", None)
         if y is not None:
+            if self.mask: # padding apply
+                from spektral.utils import pad_jagged_array
+                n_max = max([yy.shape[0] for yy in y])
+                y = pad_jagged_array(y, (n_max, -1))
+
             y = np.array(y)
 
         output = to_batch(**packed, mask=self.mask)
