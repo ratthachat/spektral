@@ -1,5 +1,5 @@
 from tensorflow.keras import backend as K
-
+import tensorflow as tf
 from spektral.layers import ops
 from spektral.layers.convolutional.conv import Conv
 from spektral.utils import gcn_filter
@@ -103,7 +103,11 @@ class GCNConv(Conv):
         if self.use_bias:
             output = K.bias_add(output, self.bias)
         if mask is not None:
-            output *= mask[0]
+            if len(tf.shape(output)) > len(tf.shape(mask[0])):
+                output *= tf.cast(tf.expand_dims(mask[0],axis=-1),tf.float32)
+            else:
+                output *= tf.cast(mask[0],tf.float32)
+    
         output = self.activation(output)
 
         return output
