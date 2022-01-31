@@ -1,5 +1,3 @@
-%%writefile /opt/conda/lib/python3.7/site-packages/spektral/data/loaders.py
-
 import numpy as np
 import tensorflow as tf
 
